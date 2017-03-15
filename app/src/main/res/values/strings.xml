@@ -2,5 +2,6 @@
     <string name="app_name">TGuide</string>
     <string name="title_activity_maps">TGuide</string>
     <string name="title_activity_tab">TGuide</string>
+    <string name="title_activity_rating">Avaliação</string>
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>

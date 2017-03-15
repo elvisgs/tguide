@@ -29,11 +29,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
-        <activity android:name=".RatingActivity" />
-        <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
             android:theme="@style/AppTheme.NoActionBar">
@@ -43,6 +38,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
+
+        <activity
+            android:name=".RatingActivity"
+            android:label="@string/title_activity_rating"
+            android:parentActivityName=".TabActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.tguide.TabActivity" />
+        </activity>
+
     </application>
 
 </manifest>
