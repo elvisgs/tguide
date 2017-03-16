@@ -3,9 +3,11 @@ package br.com.tguide;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import java.util.Calendar;
+
+import br.com.tguide.domain.PlaceRating;
+import br.com.tguide.domain.PlaceRatingRepository;
+
 public class MapFragment extends Fragment
         implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener,
             OnPoiClickListener {
@@ -36,6 +43,7 @@ public class MapFragment extends Fragment
 
     private GoogleMap map;
     private GoogleApiClient googleApiClient;
+    private PlaceRatingRepository repository = PlaceRatingRepository.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +76,8 @@ public class MapFragment extends Fragment
 
             googleApiClient.connect();
         }
+
+        Snackbar.make(getView(), "Toque em um local para avaliá-lo", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -104,13 +114,22 @@ public class MapFragment extends Fragment
         startActivityForResult(intent, RATING_REQUEST);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RatingActivity.RATING_RESULT) {
-            PointOfInterest poi = data.getParcelableExtra("poi");
-            float rating = data.getFloatExtra("rating", 0f);
+            PointOfInterest poi = data.getParcelableExtra(RatingActivity.POI_EXTRA_KEY);
+            float ratingValue = data.getFloatExtra(RatingActivity.RATING_EXTRA_KEY, 0f);
+            String comment = data.getStringExtra(RatingActivity.COMMENT_EXTRA_KEY);
 
-            String message = poi.name + " foi avaliado(a) em " + rating;
+            PlaceRating placeRating = PlaceRating.fromPoI(poi);
+            placeRating.setValue(ratingValue);
+            placeRating.setComment(comment);
+            placeRating.setCollectedAt(Calendar.getInstance().getTime());
+
+            repository.save(placeRating);
+
+            String message = placeRating.getPlaceName() + " foi avaliado(a) em " + placeRating.getValue();
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
     }

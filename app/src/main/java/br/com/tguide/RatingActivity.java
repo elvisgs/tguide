@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -15,6 +13,11 @@ import com.google.android.gms.maps.model.PointOfInterest;
 public class RatingActivity extends AppCompatActivity {
 
     public static final int RATING_RESULT = 2;
+    public static final String RATING_EXTRA_KEY = "rating";
+    public static final String POI_EXTRA_KEY = "poi";
+    public static final String COMMENT_EXTRA_KEY = "comment";
+
+    private PointOfInterest poi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,27 +27,22 @@ public class RatingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Intent intent = getIntent();
-        final PointOfInterest poi = intent.getParcelableExtra("poi");
+        poi = getIntent().getParcelableExtra("poi");
 
         TextView placeName = (TextView) findViewById(R.id.placeName);
         placeName.setText(poi.name);
+    }
 
-        Button doneButton = (Button) findViewById(R.id.done);
-        doneButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RatingBar ratingBar = (RatingBar) findViewById(R.id.rating);
-                TextView comments = (TextView) findViewById(R.id.comments);
+    public void doneRating(View view) {
+        RatingBar ratingBar = (RatingBar) findViewById(R.id.rating);
+        TextView comments = (TextView) findViewById(R.id.comments);
 
-                Intent data = new Intent()
-                        .putExtra("poi", poi)
-                        .putExtra("rating", ratingBar.getRating())
-                        .putExtra("comments", comments.getText());
+        Intent data = new Intent()
+                .putExtra(POI_EXTRA_KEY, poi)
+                .putExtra(RATING_EXTRA_KEY, ratingBar.getRating())
+                .putExtra(COMMENT_EXTRA_KEY, comments.getText());
 
-                setResult(RATING_RESULT, data);
-                finish();
-            }
-        });
+        setResult(RATING_RESULT, data);
+        finish();
     }
 }
