@@ -20,22 +20,17 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
 public class MapFragment extends Fragment
         implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener,
-            OnPoiClickListener, OnMapClickListener, OnMarkerClickListener {
+            OnPoiClickListener {
 
     public static final int RATING_REQUEST = 1;
 
@@ -63,8 +58,6 @@ public class MapFragment extends Fragment
 
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_styles));
         googleMap.setOnPoiClickListener(this);
-        googleMap.setOnMapClickListener(this);
-        googleMap.setOnMarkerClickListener(this);
 
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getContext())
@@ -105,26 +98,6 @@ public class MapFragment extends Fragment
         showRatingActivity(poi);
     }
 
-    @Override
-    public void onMapClick(LatLng latLng) {
-        map.addMarker(new MarkerOptions()
-                .position(latLng)
-                .draggable(true)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-
-
-        String tip = "Toque rápido no marcador para avaliar o local.\nToque longo para arrastar";
-        Snackbar.make(getView(), tip, Snackbar.LENGTH_INDEFINITE).show();
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        PointOfInterest poi = new PointOfInterest(marker.getPosition(), null, null);
-        showRatingActivity(poi);
-
-        return false;
-    }
-
     private void showRatingActivity(PointOfInterest poi) {
         Intent intent = new Intent(this.getActivity().getApplicationContext(), RatingActivity.class);
         intent.putExtra("poi", poi);
@@ -137,8 +110,8 @@ public class MapFragment extends Fragment
             PointOfInterest poi = data.getParcelableExtra("poi");
             float rating = data.getFloatExtra("rating", 0f);
 
-            String message = "'" + poi.name + "' foi avaliado em " + rating;
-            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+            String message = poi.name + " foi avaliado(a) em " + rating;
+            Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
     }
 

@@ -47,13 +47,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/textPrimaryColor"
                 android:textSize="20sp" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/newPlaceName"
-                android:inputType="text"
-                android:hint="Nome do local"
-                android:visibility="gone"/>
 
             <RatingBar
                 android:layout_width="wrap_content"
@@ -68,7 +61,7 @@
                 android:layout_height="0dp"
                 android:inputType="textMultiLine"
                 android:id="@+id/comments"
-                android:hint="Deixe seus comentários"
+                android:hint="Comentário"
                 android:layout_weight="1" />
 
             <Button
