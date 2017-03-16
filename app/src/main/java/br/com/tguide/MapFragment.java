@@ -20,21 +20,27 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, OnPoiClickListener {
+public class MapFragment extends Fragment
+        implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener,
+            OnPoiClickListener, OnMapClickListener, OnMarkerClickListener {
 
     public static final int RATING_REQUEST = 1;
 
-    private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleMap map;
+    private GoogleApiClient googleApiClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,25 +59,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
 
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_styles));
         googleMap.setOnPoiClickListener(this);
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(getContext())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
 
-            mGoogleApiClient.connect();
+            googleApiClient.connect();
         }
     }
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        googleApiClient.disconnect();
         super.onStop();
     }
 
@@ -81,7 +89,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
             return;
         }
 
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         LatLng latLngMyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -89,12 +97,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
                 .tilt(30)
                 .target(latLngMyLocation)
                 .build();
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.addMarker(new MarkerOptions().position(latLngMyLocation).title("Sua posição atual"));
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
     public void onPoiClick(PointOfInterest poi) {
+        showRatingActivity(poi);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .draggable(true)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+
+
+        String tip = "Toque rápido no marcador para avaliar o local.\nToque longo para arrastar";
+        Snackbar.make(getView(), tip, Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        PointOfInterest poi = new PointOfInterest(marker.getPosition(), null, null);
+        showRatingActivity(poi);
+
+        return false;
+    }
+
+    private void showRatingActivity(PointOfInterest poi) {
         Intent intent = new Intent(this.getActivity().getApplicationContext(), RatingActivity.class);
         intent.putExtra("poi", poi);
         startActivityForResult(intent, RATING_REQUEST);
@@ -106,8 +137,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
             PointOfInterest poi = data.getParcelableExtra("poi");
             float rating = data.getFloatExtra("rating", 0f);
 
-            String message = "Local '" + poi.name + "' foi avaliado em " + rating;
-            Snackbar.make(getView(), message, 3000).show();
+            String message = "'" + poi.name + "' foi avaliado em " + rating;
+            Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
         }
     }
 

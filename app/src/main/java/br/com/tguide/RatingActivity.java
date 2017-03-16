@@ -26,8 +26,19 @@ public class RatingActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         final PointOfInterest poi = intent.getParcelableExtra("poi");
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setText("Avalie o local \"" + poi.name + "\"");
+
+        TextView knownPlaceName = (TextView) findViewById(R.id.placeName);
+        final TextView newPlaceName = (TextView) findViewById(R.id.newPlaceName);
+
+        if (poi.name != null && !"".equals(poi.name)) {
+            knownPlaceName.setText(poi.name);
+            knownPlaceName.setVisibility(View.VISIBLE);
+            newPlaceName.setVisibility(View.GONE);
+            newPlaceName.setText(poi.name);
+        } else {
+            knownPlaceName.setVisibility(View.GONE);
+            newPlaceName.setVisibility(View.VISIBLE);
+        }
 
         Button doneButton = (Button) findViewById(R.id.done);
         doneButton.setOnClickListener(new OnClickListener() {
@@ -36,10 +47,13 @@ public class RatingActivity extends AppCompatActivity {
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.rating);
                 TextView comments = (TextView) findViewById(R.id.comments);
 
+                PointOfInterest newPoi = new PointOfInterest(poi.latLng, poi.placeId, newPlaceName.getText().toString());
+
                 Intent data = new Intent()
-                        .putExtra("poi", poi)
+                        .putExtra("poi", newPoi)
                         .putExtra("rating", ratingBar.getRating())
-                        .putExtra("comments", comments.getText());
+                        .putExtra("comments", comments.getText())
+                        .putExtra("isNew", newPlaceName.getVisibility() == View.VISIBLE);
 
                 setResult(RATING_RESULT, data);
                 finish();
