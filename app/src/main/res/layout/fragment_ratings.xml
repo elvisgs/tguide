@@ -1,7 +1,22 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.tguide.RatingsFragment"
-    android:id="@+id/ratings">
-</ListView>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.tguide.RatingsFragment">
+
+    <ListView
+        android:id="@+id/ratings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:text="Nenhum local foi avaliado"
+        android:textSize="16dp"
+        android:gravity="center"/>
+</RelativeLayout>

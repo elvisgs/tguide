@@ -10,7 +10,7 @@ public class PlaceRatingAverage implements Comparable<PlaceRatingAverage> {
     private String placeName;
     private float value = 0f;
 
-    public PlaceRatingAverage(LatLng latLng, String placeName, float value) {
+    public PlaceRatingAverage(@NonNull LatLng latLng, @NonNull String placeName, float value) {
         this.latLng = latLng;
         this.placeName = placeName;
         this.value = value;

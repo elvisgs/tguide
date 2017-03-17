@@ -1,6 +1,9 @@
 package br.com.tguide.domain;
 
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,14 +37,16 @@ public class PlaceRatingRepository {
         groupedByLatLng.get(latLng).add(placeRating);
     }
 
-    public List<PlaceRating> findBetween(LatLng northWest, LatLng southEast) {
+    public List<PlaceRating> findBetween(LatLngBounds latLngBounds) {
         return placeRatings;
     }
 
-    public List<PlaceRatingAverage> getAveragesBetween(LatLng northWest, LatLng southEast) {
+    public List<PlaceRatingAverage> getAveragesBetween(@NonNull LatLngBounds latLngBounds) {
         List<PlaceRatingAverage> items = new ArrayList<>();
 
         for (LatLng latLng : groupedByLatLng.keySet()) {
+            if (!latLngBounds.contains(latLng)) continue;
+
             int count = 0;
             float sum = 0;
 

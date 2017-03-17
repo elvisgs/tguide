@@ -25,10 +25,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import java.util.Calendar;
 
@@ -58,6 +60,10 @@ public class MapFragment extends Fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
+        params.height = 1000;
+        mapFragment.getView().setLayoutParams(params);
     }
 
     @Override
@@ -65,6 +71,7 @@ public class MapFragment extends Fragment
         map = googleMap;
 
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_styles));
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnPoiClickListener(this);
 
         if (googleApiClient == null) {
@@ -97,7 +104,6 @@ public class MapFragment extends Fragment
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .zoom(18)
-                .tilt(30)
                 .target(latLngMyLocation)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -132,6 +138,10 @@ public class MapFragment extends Fragment
             String message = placeRating.getPlaceName() + " foi avaliado(a) em " + placeRating.getValue();
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    public VisibleRegion getVisibleRegion() {
+        return map.getProjection().getVisibleRegion();
     }
 
     @Override

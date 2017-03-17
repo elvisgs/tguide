@@ -47,9 +47,17 @@ public class TabActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
+                    RatingsFragment ratingsFragment = null;
+                    MapFragment mapFragment = null;
                     for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                         if (fragment instanceof RatingsFragment) {
-                            ((RatingsFragment)fragment).loadRatings();
+                            ratingsFragment = (RatingsFragment) fragment;
+                        }
+                        if (fragment instanceof MapFragment) {
+                            mapFragment = (MapFragment) fragment;
+                        }
+                        if (ratingsFragment != null && mapFragment != null) {
+                            ratingsFragment.loadRatings(mapFragment.getVisibleRegion());
                         }
                     }
                 }
