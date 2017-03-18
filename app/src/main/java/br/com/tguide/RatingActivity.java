@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -65,7 +66,7 @@ public class RatingActivity extends AppCompatActivity {
 
     public void doneRating(View view) {
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating);
-        TextView comments = (TextView) findViewById(R.id.comments);
+        EditText comments = (EditText) findViewById(R.id.comments);
 
         Intent data = new Intent()
                 .putExtra(POI_EXTRA_KEY, poi)

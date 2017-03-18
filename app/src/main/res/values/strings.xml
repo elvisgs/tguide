@@ -7,4 +7,7 @@
     <string name="tip_map_action">Toque em um local para fazer uma sugestão</string>
     <string name="success_place_rating">%1$s foi avaliado(a) em %2$.1f</string>
     <string name="empty_ratings_list">Ainda não há sugestões</string>
+    <string name="title_activity_details">Comentários</string>
+    <string name="details_rating_value">★ %1$.1f</string>
+    <string name="no_comment">Sem comentário</string>
 </resources>

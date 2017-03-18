@@ -1,6 +1,7 @@
 package br.com.tguide.domain;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -61,6 +62,17 @@ public class PlaceRatingRepository {
         }
 
         Collections.sort(items);
+
+        return items;
+    }
+
+    public List<PlaceRating> findByLatLng(LatLng latLng) {
+        List<PlaceRating> items = new ArrayList<>();
+        for (PlaceRating rating : placeRatings) {
+            LatLng placeLatLng = rating.getLatLng();
+            if (placeLatLng.latitude == latLng.latitude && placeLatLng.longitude == latLng.longitude)
+                items.add(rating);
+        }
 
         return items;
     }

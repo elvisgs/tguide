@@ -124,7 +124,7 @@ public class MapFragment extends Fragment
         if (resultCode == RatingActivity.RATING_RESULT) {
             PointOfInterest poi = data.getParcelableExtra(RatingActivity.POI_EXTRA_KEY);
             float ratingValue = data.getFloatExtra(RatingActivity.RATING_EXTRA_KEY, 0f);
-            String comment = data.getStringExtra(RatingActivity.COMMENT_EXTRA_KEY);
+            String comment = data.getCharSequenceExtra(RatingActivity.COMMENT_EXTRA_KEY).toString();
 
             PlaceRating placeRating = PlaceRating.fromPoI(poi);
             placeRating.setValue(ratingValue);
