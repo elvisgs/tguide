@@ -1,5 +1,6 @@
 package br.com.tguide;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -96,11 +97,12 @@ public class TabActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
+            Resources res = getResources();
             switch (position) {
                 case 0:
-                    return "Mapa";
+                    return res.getString(R.string.title_tab_map);
                 case 1:
-                    return "Avaliações";
+                    return res.getString(R.string.title_tab_ratings);
             }
 
             return null;

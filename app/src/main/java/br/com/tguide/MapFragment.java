@@ -80,7 +80,8 @@ public class MapFragment extends Fragment
             googleApiClient.connect();
         }
 
-        Snackbar.make(getView(), "Toque em um local para avaliá-lo", Snackbar.LENGTH_LONG).show();
+        String tip = getResources().getString(R.string.tip_map_action);
+        Snackbar.make(getView(), tip, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -132,7 +133,8 @@ public class MapFragment extends Fragment
 
             repository.save(placeRating);
 
-            String message = placeRating.getPlaceName() + " foi avaliado(a) em " + placeRating.getValue();
+            String message = getResources().getString(R.string.success_place_rating,
+                    placeRating.getPlaceName(), placeRating.getValue());
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         }
     }
