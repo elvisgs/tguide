@@ -1,11 +1,11 @@
 package br.com.tguide;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -15,8 +15,11 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import br.com.tguide.domain.WeatherRepository;
+
+import static br.com.tguide.util.DistanceUtil.formatDistanceBetween;
 
 public class RatingActivity extends AppCompatActivity {
 
@@ -33,8 +36,6 @@ public class RatingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         poi = getIntent().getParcelableExtra("poi");
@@ -42,12 +43,24 @@ public class RatingActivity extends AppCompatActivity {
         TextView placeName = (TextView) findViewById(R.id.placeName);
         placeName.setText(poi.name);
 
+        showDistance();
+
         TextView weather = (TextView) findViewById(R.id.weather);
         weather.setText(weatherRepository.getWeatherForPosition(null));
 
         TextView dateTime = (TextView) findViewById(R.id.dateTime);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm", Locale.getDefault());
         dateTime.setText(dateFormat.format(Calendar.getInstance().getTime()));
+    }
+
+    private void showDistance() {
+        Location myLocation = getIntent().getParcelableExtra("myLocation");
+        Location poiLocation = new Location("poi");
+        poiLocation.setLatitude(poi.latLng.latitude);
+        poiLocation.setLongitude(poi.latLng.longitude);
+
+        TextView distance = (TextView) findViewById(R.id.distance);
+        distance.setText(formatDistanceBetween(myLocation, poiLocation));
     }
 
     public void doneRating(View view) {

@@ -54,7 +54,9 @@ public class TabActivity extends AppCompatActivity {
                             mapFragment = (MapFragment) fragment;
                         }
                         if (ratingsFragment != null && mapFragment != null) {
-                            ratingsFragment.loadRatings(mapFragment.getVisibleRegion());
+                            ratingsFragment.loadRatings(
+                                    mapFragment.getVisibleRegion(),
+                                    mapFragment.getMyLocation());
                         }
                     }
                 }

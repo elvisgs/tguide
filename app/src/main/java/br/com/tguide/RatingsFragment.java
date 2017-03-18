@@ -1,5 +1,6 @@
 package br.com.tguide;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ public class RatingsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_ratings, container, false);
     }
 
-    public void loadRatings(VisibleRegion visibleRegion) {
+    public void loadRatings(VisibleRegion visibleRegion, Location myLocation) {
         List<PlaceRatingAverage> averages = repository
                 .getAveragesBetween(visibleRegion.latLngBounds);
 
@@ -35,6 +36,7 @@ public class RatingsFragment extends Fragment {
         list.setEmptyView(emptyText);
 
         RatingsListAdapter adapter = new RatingsListAdapter(getContext(), averages);
+        adapter.setMyLocation(myLocation);
         list.setAdapter(adapter);
     }
 

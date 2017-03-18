@@ -45,6 +45,7 @@ public class MapFragment extends Fragment
     private GoogleMap map;
     private GoogleApiClient googleApiClient;
     private PlaceRatingRepository repository = PlaceRatingRepository.getInstance();
+    private Location myLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +95,7 @@ public class MapFragment extends Fragment
             return;
         }
 
-        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         LatLng latLngMyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -112,6 +113,7 @@ public class MapFragment extends Fragment
     private void showRatingActivity(PointOfInterest poi) {
         Intent intent = new Intent(this.getActivity().getApplicationContext(), RatingActivity.class);
         intent.putExtra("poi", poi);
+        intent.putExtra("myLocation", myLocation);
         startActivityForResult(intent, RATING_REQUEST);
     }
 
@@ -137,6 +139,10 @@ public class MapFragment extends Fragment
 
     public VisibleRegion getVisibleRegion() {
         return map.getProjection().getVisibleRegion();
+    }
+
+    public Location getMyLocation() {
+        return myLocation;
     }
 
     @Override
