@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">TGuide</string>
     <string name="title_activity_tab">TGuide</string>
-    <string name="title_activity_rating">Sugestão</string>
+    <string name="title_activity_rating">Avaliação</string>
     <string name="title_tab_map">Mapa</string>
     <string name="title_tab_ratings">Sugestões</string>
-    <string name="tip_map_action">Toque em um local para fazer uma sugestão</string>
+    <string name="tip_map_action">Toque em um local para avaliá-lo</string>
     <string name="success_place_rating">%1$s foi avaliado(a) em %2$.1f</string>
     <string name="empty_ratings_list">Ainda não há sugestões</string>
     <string name="title_activity_details">Comentários</string>
