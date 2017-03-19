@@ -14,17 +14,22 @@
             android:id="@+id/dateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="18/03/2017 17:00"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/rating"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:text="★ "
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="★ 4,5"
+            android:text="4,5"
             android:textStyle="bold" />
     </LinearLayout>
 

@@ -59,7 +59,7 @@ public class DetailsListAdapter extends BaseAdapter {
 
         PlaceRating item = items.get(position);
         dateTime.setText(dateFormat.format(item.getCollectedAt()));
-        rating.setText(resources.getString(R.string.details_rating_value, item.getValue()));
+        rating.setText(String.format(Locale.getDefault(), "%.1f", item.getValue()));
         comment.setText(formatComment(item.getComment()));
 
         return view;
