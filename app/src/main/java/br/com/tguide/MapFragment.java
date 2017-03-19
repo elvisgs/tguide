@@ -25,9 +25,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.VisibleRegion;
 
@@ -104,6 +106,12 @@ public class MapFragment extends Fragment
                 .target(latLngMyLocation)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        map.addMarker(new MarkerOptions()
+                .position(latLngMyLocation)
+                .title("Sua posição atual")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+        );
     }
 
     @Override
