@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -25,5 +29,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.2.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.squareup.retrofit2:converter-jackson:2.2.0'
     testCompile 'junit:junit:4.12'
 }

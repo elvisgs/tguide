@@ -12,13 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.tguide.service.TGuideApi;
+import br.com.tguide.service.TGuideApiServiceBuilder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PlaceRatingRepository {
 
     private static PlaceRatingRepository instance;
+    private final TGuideApi api;
     private List<PlaceRating> placeRatings = new ArrayList<>();
     private Map<LatLng, List<PlaceRating>> groupedByLatLng = new HashMap<>();
 
-    private PlaceRatingRepository() {}
+    private PlaceRatingRepository() {
+        api = new TGuideApiServiceBuilder().build();
+    }
 
     public static PlaceRatingRepository getInstance() {
         if (instance == null)
@@ -28,6 +37,8 @@ public class PlaceRatingRepository {
     }
 
     public void save(PlaceRating placeRating) {
+        saveRemotely(placeRating);
+
         placeRatings.add(placeRating);
 
         LatLng latLng = placeRating.getLatLng();
@@ -38,8 +49,18 @@ public class PlaceRatingRepository {
         groupedByLatLng.get(latLng).add(placeRating);
     }
 
-    public List<PlaceRating> findBetween(LatLngBounds latLngBounds) {
-        return placeRatings;
+    private void saveRemotely(PlaceRating placeRating) {
+        api.save(placeRating).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.i("API", call.request().url().toString() + " called without errors");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("API", "Call to " + call.request().url() + " failed", t);
+            }
+        });
     }
 
     public List<PlaceRatingAverage> getAveragesBetween(@NonNull LatLngBounds latLngBounds) {

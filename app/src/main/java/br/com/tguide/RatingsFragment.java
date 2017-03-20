@@ -22,7 +22,7 @@ import br.com.tguide.domain.PlaceRatingRepository;
 public class RatingsFragment extends Fragment implements OnItemClickListener {
 
     public static final String LAT_LNG_KEY = "latLng";
-    PlaceRatingRepository repository = PlaceRatingRepository.getInstance();
+    private PlaceRatingRepository repository = PlaceRatingRepository.getInstance();
     private List<PlaceRatingAverage> averages;
 
     @Override
