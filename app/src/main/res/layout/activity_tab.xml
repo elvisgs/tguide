@@ -28,4 +28,12 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="true"
+        android:keepScreenOn="false"
+        android:visibility="visible" />
+
 </android.support.design.widget.CoordinatorLayout>

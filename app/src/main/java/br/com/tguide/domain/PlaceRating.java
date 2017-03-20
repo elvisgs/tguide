@@ -16,6 +16,17 @@ public class PlaceRating implements Comparable<PlaceRating> {
     private String placeName, comment;
     private Date collectedAt;
 
+    public PlaceRating() {
+    }
+
+    public PlaceRating(LatLng latLng, String placeName, float value, String comment, Date collectedAt) {
+        this.latLng = latLng;
+        this.value = value;
+        this.placeName = placeName;
+        this.comment = comment;
+        this.collectedAt = collectedAt;
+    }
+
     public LatLng getLatLng() {
         return latLng;
     }

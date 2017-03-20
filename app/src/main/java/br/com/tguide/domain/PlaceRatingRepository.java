@@ -1,7 +1,6 @@
 package br.com.tguide.domain;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -12,17 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.tguide.service.OnDataLoaded;
+import br.com.tguide.service.SimpleCallback;
 import br.com.tguide.service.TGuideApi;
 import br.com.tguide.service.TGuideApiServiceBuilder;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlaceRatingRepository {
 
     private static PlaceRatingRepository instance;
     private final TGuideApi api;
-    private List<PlaceRating> placeRatings = new ArrayList<>();
+    private List<PlaceRating> ratingsCache = new ArrayList<>();
     private Map<LatLng, List<PlaceRating>> groupedByLatLng = new HashMap<>();
 
     private PlaceRatingRepository() {
@@ -39,8 +39,12 @@ public class PlaceRatingRepository {
     public void save(PlaceRating placeRating) {
         saveRemotely(placeRating);
 
-        placeRatings.add(placeRating);
+        ratingsCache.add(placeRating);
 
+        addToGroup(placeRating);
+    }
+
+    private void addToGroup(PlaceRating placeRating) {
         LatLng latLng = placeRating.getLatLng();
         if (!groupedByLatLng.containsKey(latLng)) {
             groupedByLatLng.put(latLng, new ArrayList<PlaceRating>());
@@ -49,16 +53,25 @@ public class PlaceRatingRepository {
         groupedByLatLng.get(latLng).add(placeRating);
     }
 
-    private void saveRemotely(PlaceRating placeRating) {
-        api.save(placeRating).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i("API", call.request().url().toString() + " called without errors");
-            }
+    private void groupAll() {
+        for (PlaceRating rating : ratingsCache)
+            addToGroup(rating);
+    }
 
+    private void saveRemotely(PlaceRating placeRating) {
+        api.saveRating(placeRating).enqueue(new SimpleCallback<Void>());
+    }
+
+    public void loadCache(final OnDataLoaded<List<PlaceRating>> onDataLoaded) {
+        api.findAllRatings().enqueue(new SimpleCallback<List<PlaceRating>>() {
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("API", "Call to " + call.request().url() + " failed", t);
+            public void onResponse(Call<List<PlaceRating>> call, Response<List<PlaceRating>> response) {
+                super.onResponse(call, response);
+                ratingsCache = response.body();
+                groupAll();
+
+                if (onDataLoaded != null)
+                    onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache));
             }
         });
     }
@@ -89,7 +102,7 @@ public class PlaceRatingRepository {
 
     public List<PlaceRating> findByLatLng(LatLng latLng) {
         List<PlaceRating> items = new ArrayList<>();
-        for (PlaceRating rating : placeRatings) {
+        for (PlaceRating rating : ratingsCache) {
             LatLng placeLatLng = rating.getLatLng();
             if (placeLatLng.latitude == latLng.latitude && placeLatLng.longitude == latLng.longitude)
                 items.add(rating);
