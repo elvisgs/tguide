@@ -63,6 +63,13 @@ public class PlaceRatingRepository {
     }
 
     public void loadCache(final OnDataLoaded<List<PlaceRating>> onDataLoaded) {
+        if (!ratingsCache.isEmpty()) {
+            if (onDataLoaded != null)
+                onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache));
+
+            return;
+        }
+
         api.findAllRatings().enqueue(new SimpleCallback<List<PlaceRating>>() {
             @Override
             public void onResponse(Call<List<PlaceRating>> call, Response<List<PlaceRating>> response) {
