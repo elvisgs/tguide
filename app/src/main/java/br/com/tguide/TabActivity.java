@@ -92,6 +92,10 @@ public class TabActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void showMapTab() {
+        mViewPager.setCurrentItem(0);
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

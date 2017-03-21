@@ -155,6 +155,15 @@ public class MapFragment extends Fragment
         return myLocation;
     }
 
+    public void showLocation(LatLng latLng) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .zoom(19)
+                .target(latLng)
+                .build();
+
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
     }
