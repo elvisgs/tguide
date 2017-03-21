@@ -13,11 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import java.util.List;
-
-import br.com.tguide.domain.PlaceRating;
 import br.com.tguide.domain.PlaceRatingRepository;
-import br.com.tguide.service.OnDataLoaded;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -75,13 +71,6 @@ public class TabActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }
-        });
-
-        ratingRepository.loadCache(new OnDataLoaded<List<PlaceRating>>() {
-            @Override
-            public void dataLoaded(List<PlaceRating> data) {
-                findViewById(R.id.progress).setVisibility(View.GONE);
             }
         });
     }

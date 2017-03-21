@@ -16,6 +16,7 @@ import br.com.tguide.service.SimpleCallback;
 import br.com.tguide.service.TGuideApi;
 import br.com.tguide.service.TGuideApiServiceBuilder;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlaceRatingRepository {
@@ -65,20 +66,25 @@ public class PlaceRatingRepository {
     public void loadCache(final OnDataLoaded<List<PlaceRating>> onDataLoaded) {
         if (!ratingsCache.isEmpty()) {
             if (onDataLoaded != null)
-                onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache));
+                onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache), null);
 
             return;
         }
 
-        api.findAllRatings().enqueue(new SimpleCallback<List<PlaceRating>>() {
+        api.findAllRatings().enqueue(new Callback<List<PlaceRating>>() {
             @Override
             public void onResponse(Call<List<PlaceRating>> call, Response<List<PlaceRating>> response) {
-                super.onResponse(call, response);
                 ratingsCache = response.body();
                 groupAll();
 
                 if (onDataLoaded != null)
-                    onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache));
+                    onDataLoaded.dataLoaded(Collections.unmodifiableList(ratingsCache), null);
+            }
+
+            @Override
+            public void onFailure(Call<List<PlaceRating>> call, Throwable t) {
+                if (onDataLoaded != null)
+                    onDataLoaded.dataLoaded(null, t);
             }
         });
     }

@@ -33,13 +33,7 @@
         <activity
             android:name=".TabActivity"
             android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RatingActivity"
             android:label="@string/title_activity_rating"
@@ -56,6 +50,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.tguide.TabActivity" />
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
