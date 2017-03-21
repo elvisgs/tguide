@@ -9,4 +9,6 @@
     <string name="empty_ratings_list">Ainda não há sugestões</string>
     <string name="title_activity_details">Comentários</string>
     <string name="no_comment">Sem comentário</string>
+    <string name="form_tguide">Avaliar TGuide</string>
+    <string name="form_url"><![CDATA[https://docs.google.com/forms/d/e/1FAIpQLSfytWJG-1q7mUIW3lyN8sLSCGx7aJC4iGE7CmjSXaDJpLOVPQ/viewform?c=0&w=1]]></string>
 </resources>
