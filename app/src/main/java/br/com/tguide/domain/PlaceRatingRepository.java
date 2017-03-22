@@ -113,11 +113,10 @@ public class PlaceRatingRepository {
         return items;
     }
 
-    public List<PlaceRating> findByLatLng(LatLng latLng) {
+    public List<PlaceRating> findByLatLng(@NonNull LatLng latLng) {
         List<PlaceRating> items = new ArrayList<>();
         for (PlaceRating rating : ratingsCache) {
-            LatLng placeLatLng = rating.getLatLng();
-            if (placeLatLng.latitude == latLng.latitude && placeLatLng.longitude == latLng.longitude)
+            if (rating.getLatLng().equals(latLng))
                 items.add(rating);
         }
 
